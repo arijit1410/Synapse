@@ -22,6 +22,13 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.Date;
 
 import static javax.swing.border.TitledBorder.CENTER;
 import static javax.swing.border.TitledBorder.DEFAULT_POSITION;
@@ -44,6 +51,7 @@ public class Main extends javax.swing.JFrame {
      */
     public Main() {
         initComponents();
+        
     }
         private void resetData() {
         inputs.clear();
@@ -181,11 +189,12 @@ public class Main extends javax.swing.JFrame {
         trainingValue.setText(resultTrain[2]);
         String resultTest = network.test(testData, maxTimes, minError);
         testingValue.setText(resultTest);
-        //coordinatePanel.repaint();
+        coordinatePanel.repaint();
     }
 
     
         private void loadFile(JFileChooser fileChooser) {
+        //coordinatePanel = new GPanel();    
         File loadedFile = fileChooser.getSelectedFile();
         loadValue.setText(loadedFile.getPath());
         //resetFrame();
@@ -233,6 +242,22 @@ public class Main extends javax.swing.JFrame {
             e1.printStackTrace();
         }
     }
+        
+       private Double[] convertCoordinate(Double[] oldPoint) {
+        Double[] newPoint = new Double[2];
+        newPoint[0] = (oldPoint[0] * magnification) + 250;
+        newPoint[1] = 250 - (oldPoint[1] * magnification);
+        return newPoint;
+    }
+       
+     private void createUIComponents() {
+        //coordinatePanel = new GPanel();
+        //coordinatePanel.setVisible(true);
+       // zoomerSlider = new JSlider();
+       // zoomerSlider.setBorder(
+               // BorderFactory.createTitledBorder(null,
+                        //Integer.toString(zoomerSlider.getValue()), CENTER, DEFAULT_POSITION));
+    }
 
         
     /**
@@ -244,6 +269,10 @@ public class Main extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jFrame1 = new javax.swing.JFrame();
+        jFrame2 = new javax.swing.JFrame();
+        jFrame3 = new javax.swing.JFrame();
+        jFrame4 = new javax.swing.JFrame();
         loadButton = new javax.swing.JButton();
         loadValue = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -252,7 +281,6 @@ public class Main extends javax.swing.JFrame {
         trainTable = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -278,7 +306,57 @@ public class Main extends javax.swing.JFrame {
         testingValue = new javax.swing.JLabel();
         minErrorTextField = new javax.swing.JTextField();
         generateButton = new javax.swing.JButton();
+        coordinatePanel = new javax.swing.JPanel();
         layoutPanel = new javax.swing.JPanel();
+        graphButton = new javax.swing.JButton();
+        saveButton = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+
+        javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
+        jFrame1.getContentPane().setLayout(jFrame1Layout);
+        jFrame1Layout.setHorizontalGroup(
+            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        jFrame1Layout.setVerticalGroup(
+            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
+
+        jFrame2.setFocusableWindowState(false);
+
+        javax.swing.GroupLayout jFrame2Layout = new javax.swing.GroupLayout(jFrame2.getContentPane());
+        jFrame2.getContentPane().setLayout(jFrame2Layout);
+        jFrame2Layout.setHorizontalGroup(
+            jFrame2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        jFrame2Layout.setVerticalGroup(
+            jFrame2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout jFrame3Layout = new javax.swing.GroupLayout(jFrame3.getContentPane());
+        jFrame3.getContentPane().setLayout(jFrame3Layout);
+        jFrame3Layout.setHorizontalGroup(
+            jFrame3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        jFrame3Layout.setVerticalGroup(
+            jFrame3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout jFrame4Layout = new javax.swing.GroupLayout(jFrame4.getContentPane());
+        jFrame4.getContentPane().setLayout(jFrame4Layout);
+        jFrame4Layout.setHorizontalGroup(
+            jFrame4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        jFrame4Layout.setVerticalGroup(
+            jFrame4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -320,8 +398,6 @@ public class Main extends javax.swing.JFrame {
         jLabel1.setText("Train Set");
 
         jLabel2.setText("Test Set");
-
-        jLabel3.setText("Synapse - An interactive tool for tuning neural networks.");
 
         jLabel4.setText("Hidden Layer");
 
@@ -381,7 +457,7 @@ public class Main extends javax.swing.JFrame {
 
         minErrorTextField.setText("0.01");
 
-        generateButton.setText("Generate");
+        generateButton.setText("Generate Results ");
         generateButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 generateButtonActionPerformed(evt);
@@ -392,85 +468,131 @@ public class Main extends javax.swing.JFrame {
         layoutPanel.setLayout(layoutPanelLayout);
         layoutPanelLayout.setHorizontalGroup(
             layoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 11, Short.MAX_VALUE)
         );
         layoutPanelLayout.setVerticalGroup(
             layoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 78, Short.MAX_VALUE)
+            .addGap(0, 99, Short.MAX_VALUE)
         );
+
+        javax.swing.GroupLayout coordinatePanelLayout = new javax.swing.GroupLayout(coordinatePanel);
+        coordinatePanel.setLayout(coordinatePanelLayout);
+        coordinatePanelLayout.setHorizontalGroup(
+            coordinatePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(coordinatePanelLayout.createSequentialGroup()
+                .addGap(36, 36, 36)
+                .addComponent(layoutPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(64, 64, 64))
+        );
+        coordinatePanelLayout.setVerticalGroup(
+            coordinatePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(coordinatePanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(layoutPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        graphButton.setText("Generate Graph");
+        graphButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                graphButtonActionPerformed(evt);
+            }
+        });
+
+        saveButton.setText("Save Results");
+        saveButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveButtonActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("Synapse - An interactive tool for tuning neural networks.");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(coordinatePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
+                        .addGap(32, 32, 32)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addGap(0, 73, Short.MAX_VALUE))
-                            .addComponent(layoutPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(graphButton, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(120, 120, 120)
+                                .addComponent(generateButton))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addComponent(jLabel6)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(learningTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel4)
+                                            .addComponent(jLabel5))
+                                        .addGap(33, 33, 33)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(momentumTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(hiddenTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGap(135, 135, 135)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel7)
+                                    .addComponent(jLabel9)
+                                    .addComponent(jLabel8)))
+                            .addComponent(saveButton))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(loadButton, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(82, 82, 82)
+                        .addComponent(jLabel1)
+                        .addGap(152, 152, 152))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(loadButton, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(82, 82, 82)
-                                .addComponent(jLabel1)
-                                .addGap(152, 152, 152))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addComponent(loadValue)
-                                        .addGap(9, 9, 9))
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(jLabel5)
-                                                .addComponent(jLabel6)
-                                                .addComponent(jLabel7)
-                                                .addComponent(jLabel8)
-                                                .addComponent(jLabel9)
-                                                .addComponent(jLabel10)
-                                                .addComponent(jLabel11)
-                                                .addComponent(jLabel12)
-                                                .addComponent(jLabel13)
-                                                .addComponent(jLabel14))
-                                            .addGap(21, 21, 21)
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                    .addComponent(timesValue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                    .addComponent(trainingValue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                    .addComponent(testingValue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                    .addComponent(MSEValue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                    .addComponent(learningTextField)
-                                                    .addComponent(thresholdTextField)
-                                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                        .addComponent(minErrorTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(maxTImesValue, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                    .addComponent(momentumTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(hiddenTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addGroup(layout.createSequentialGroup()
-                                                    .addComponent(wRangeMinValue, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                    .addComponent(wRangeMaxValue, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                        .addComponent(jLabel4)
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addComponent(jLabel15)
-                                            .addGap(104, 104, 104)
-                                            .addComponent(generateButton))))
+                                .addComponent(loadValue)
+                                .addGap(9, 9, 9))
+                            .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addGap(57, 57, 57)
-                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel10)
+                                            .addComponent(jLabel11)
+                                            .addComponent(jLabel12)
+                                            .addComponent(jLabel13)
+                                            .addComponent(jLabel14))
+                                        .addGap(63, 63, 63)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(timesValue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(trainingValue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(testingValue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(MSEValue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(minErrorTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(jLabel15)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addGap(144, 144, 144)
-                                        .addComponent(jLabel2)))))))
-                .addContainerGap())
+                                        .addGap(6, 6, 6)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(maxTImesValue, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(thresholdTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(wRangeMinValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(wRangeMaxValue, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(17, 17, 17)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(57, 57, 57)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(144, 144, 144)
+                                .addComponent(jLabel2))))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -483,51 +605,61 @@ public class Main extends javax.swing.JFrame {
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(34, 34, 34)
                         .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(26, 26, 26))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(loadButton)
-                        .addGap(18, 18, 18)
-                        .addComponent(loadValue)
-                        .addGap(24, 24, 24)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel4)
-                            .addComponent(hiddenTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5)
-                            .addComponent(momentumTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel6)
-                            .addComponent(learningTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel7)
-                            .addComponent(thresholdTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel8)
-                            .addComponent(wRangeMinValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(wRangeMaxValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(loadButton)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(loadValue))
+                                .addComponent(coordinatePanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel9)
-                                    .addComponent(maxTImesValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel10)
-                                    .addComponent(minErrorTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel11)
-                                    .addComponent(timesValue))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(322, 322, 322)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                            .addComponent(jLabel10)
+                                            .addComponent(minErrorTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                            .addComponent(jLabel11)
+                                            .addComponent(timesValue)))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(20, 20, 20)
+                                        .addComponent(jLabel3)
+                                        .addGap(76, 76, 76)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                            .addComponent(jLabel4)
+                                            .addComponent(hiddenTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel7)
+                                            .addComponent(thresholdTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(46, 46, 46)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                            .addComponent(jLabel5)
+                                            .addComponent(momentumTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel9)
+                                            .addComponent(maxTImesValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGap(56, 56, 56)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                    .addComponent(jLabel6)
+                                                    .addComponent(learningTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGap(42, 42, 42)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                    .addComponent(jLabel8)
+                                                    .addComponent(wRangeMinValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(wRangeMaxValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(jLabel12)
-                                    .addComponent(MSEValue))
+                                    .addComponent(MSEValue)
+                                    .addComponent(graphButton)
+                                    .addComponent(generateButton))
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(jLabel13)
@@ -536,19 +668,11 @@ public class Main extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(jLabel14)
                                     .addComponent(testingValue))
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel15)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(generateButton)
-                                .addGap(38, 38, 38))))))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(jLabel3)
-                .addGap(18, 18, 18)
-                .addComponent(layoutPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(saveButton)
+                                .addGap(23, 23, 23)
+                                .addComponent(jLabel15)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         pack();
@@ -567,6 +691,11 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_thresholdTextFieldActionPerformed
 
     private void loadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadButtonActionPerformed
+            //GPanel coordinatePanel = new GPanel();
+            //jFrame0.add(coordinatePanel);
+            //jFrame0.pack();
+            //jFrame0.setVisible(true);
+            coordinatePanel.setVisible(true);
             JFileChooser fileChooser = new JFileChooser();
             FileNameExtensionFilter filter = new FileNameExtensionFilter("Text Files(*.txt)", "txt", "text");
             fileChooser.setFileFilter(filter);
@@ -583,6 +712,54 @@ public class Main extends javax.swing.JFrame {
            hidden = hiddenTextField.getText();  
     }//GEN-LAST:event_hiddenTextFieldActionPerformed
 
+    private void graphButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_graphButtonActionPerformed
+        // TODO add your handling code here:
+        coordinatePanel = new GPanel();
+        //Main window = new Main();
+        coordinatePanel.setSize(3000,3000);
+        jFrame4.add(coordinatePanel);
+        jFrame4.validate();
+        
+        jFrame4.pack();
+        jFrame4.setVisible(true);
+    }//GEN-LAST:event_graphButtonActionPerformed
+
+    private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
+        // TODO add your handling code here:
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+	LocalDateTime now = LocalDateTime.now();
+	String date = dtf.format(now).toString();
+        JOptionPane.showMessageDialog(jFrame1, date);
+        
+        String path = "/home/quicksilver/NetBeansProjects/Synapse/src/synapse/Users/logs/log-" + date +".txt";
+        try{
+            PrintWriter writer = new PrintWriter(path, "UTF-8");
+        
+        writer.println("Dataset trained on " + loadValue.getText() );
+        writer.println("Training Accuracy " + trainingValue.getText());
+        writer.println("Training Accuracy " + testingValue.getText());
+        writer.println("Number of Epochs " + maxTImesValue.getText());
+        writer.println("************** Model Summary **************");
+        writer.println("Number of hidden layers" + hiddenTextField.getText());
+        writer.println("Momentum " + momentumTextField.getText());
+        writer.println("Optimizer :- SGD with momentum");
+        writer.println("Learning rate " + learningTextField.getText());
+        
+        
+        
+  
+        writer.close();
+    }//GEN-LAST:event_saveButtonActionPerformed
+catch (FileNotFoundException e) {
+            JOptionPane.showMessageDialog(jFrame1, "Unexpected error. File wasn't found");
+}
+catch (UnsupportedEncodingException e) {
+            JOptionPane.showMessageDialog(jFrame1, "Unexpected error. File wasn't found");
+}
+        
+    }
+        
+        
     /**
      * @param args the command line arguments
      */
@@ -613,15 +790,111 @@ public class Main extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Main().setVisible(true);
+                
+               //Main window = new Main();
+                //System.out.println("Hello");
+                //coordinatePanel = new GPanel();
+                //coordinatePanel.setSize(100,100);
+                //window.add(coordinatePanel);
+
+                //window.pack();
+                //window.setVisible(true);
+
+	//Main().setVisible(true);
+                
+                //new Main().setVisible(true);
+                //jFrame1.setVisible(true);
+                
+                //coordinatePanel = new GPanel();
             }
         });
     }
+    private class GPanel extends JPanel {
+        @Override
+        public void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            Graphics2D g2 = (Graphics2D) g;
+            // Draw output kind area
+            if (drawMode && size > 0 && inputs.size() > 0 && inputs.get(0).length == 4) {
+                ArrayList<Double[]> drawInputs = new ArrayList<>();
+                for (Double x = -250.0; x <= 250; x += size) {
+                    for (Double y = -250.0; y <= 250; y += size) {
+                        drawInputs.add(new Double[]{-1.0, x / magnification, y / magnification});
+                    }
+                }
+                int id[] = network.getOutputKind(drawInputs, maxTimes, minError);
+                int i = 0;
+                for (Double x = -250.0; x <= 250; x += size) {
+                    for (Double y = -250.0; y <= 250; y += size) {
+                        g2.setColor(colorArray[colorArray.length - id[i] - 1]);
+                        Double[] point = convertCoordinate(new Double[]{x / magnification, y / magnification});
+                        Rectangle2D rect = new Rectangle2D.Double(point[0], point[1], size, size);
+                        g2.fill(rect);
+                        i++;
+                    }
+                }
+            }
+            g.setColor(Color.black);
+            g.drawLine(250, 0, 250, 500);
+            g.drawLine(0, 250, 500, 250);
+            g2.setColor(Color.black);
+            // Draw scale
+            for (Double i = 250.0; i >= 0; i -= 5.0 * magnification / 10) {
+                drawScale(g2, i);
+            }
+            for (Double i = 250.0; i <= 500; i += 5.0 * magnification / 10) {
+                drawScale(g2, i);
+            }
+            g2.setStroke(new BasicStroke(3));
+            // Draw mouse position
+            if (mouse != null) {
+                Double mouse_x = (mouse.getX() - 250) / magnification;
+                Double mouse_y = (250 - mouse.getY()) / magnification;
+                g2.drawString("(" + df.format(mouse_x) + ", " + df.format(mouse_y) + ")", 420, 20);
+            }
+            // Draw point of file
+            if (inputs.size() > 0 && inputs.get(0).length == 4) {
+                for (Double[] x : inputs) {
+                    Double[] point = convertCoordinate(new Double[]{x[1], x[2]});
+                    for (int i = 0; i < outputKinds.size(); i++) {
+                        Double outputKind = outputKinds.get(i);
+                        if (x[x.length - 1].equals(outputKind)) {
+                            g2.setColor(colorArray[i]);
+                            break;
+                        }
+                    }
+                    g2.draw(new Line2D.Double(point[0], point[1], point[0], point[1]));
+                }
+            }
+            // TODO: Draw line of decision boundary
+        }
+
+        private void drawScale(Graphics2D g2, Double i) {
+            Double[] top, btn;
+            Double scaleLength = (i % (5.0 * magnification / 5) == 0) ? 2.0 * magnification / 20 : 1.0 * magnification / 20;
+            top = convertCoordinate(new Double[]{(i - 250) / magnification, scaleLength / magnification});
+            btn = convertCoordinate(new Double[]{(i - 250) / magnification, -scaleLength / magnification});
+            g2.draw(new Line2D.Double(top[0], top[1], btn[0], btn[1]));
+            top = convertCoordinate(new Double[]{-scaleLength / magnification, (250 - i) / magnification});
+            btn = convertCoordinate(new Double[]{scaleLength / magnification, (250 - i) / magnification});
+            g2.draw(new Line2D.Double(top[0], top[1], btn[0], btn[1]));
+        }
+    }
+    
+    
+
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel MSEValue;
+    private javax.swing.JPanel coordinatePanel;
     private javax.swing.JButton generateButton;
+    private javax.swing.JButton graphButton;
     private javax.swing.JTextField hiddenTextField;
+    private javax.swing.JFrame jFrame1;
+    private javax.swing.JFrame jFrame2;
+    private javax.swing.JFrame jFrame3;
+    private javax.swing.JFrame jFrame4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -646,6 +919,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JTextField maxTImesValue;
     private javax.swing.JTextField minErrorTextField;
     private javax.swing.JTextField momentumTextField;
+    private javax.swing.JButton saveButton;
     private javax.swing.JTable testTable;
     private javax.swing.JLabel testingValue;
     private javax.swing.JTextField thresholdTextField;
@@ -658,13 +932,13 @@ public class Main extends javax.swing.JFrame {
     private DecimalFormat df = new DecimalFormat("####0.00");
     private Color[] colorArray = {Color.BLUE, Color.RED, Color.GREEN, Color.YELLOW, Color.CYAN, Color.PINK};
     private NeuralNetwork network;
-    private ArrayList<Double[]> inputs = new ArrayList<>();
+    private static ArrayList<Double[]> inputs = new ArrayList<>();
     private ArrayList<Double[]> trainData = new ArrayList<>();
     private ArrayList<Double[]> testData = new ArrayList<>();
     private ArrayList<Double> outputKinds = new ArrayList<>();
     private Point mouse;
     private int maxTimes = 1000;
-    private int magnification = 50;
+    private static int magnification = 50;
     private String hidden = "4,4";
     private double momentum = 0.7;
     private double learningRate = 0.1;
@@ -672,8 +946,8 @@ public class Main extends javax.swing.JFrame {
     private double minRange = -0.5;
     private double maxRange = 0.5;
     private double minError = 0.01;
-    private double size = 20.0;
-    private boolean drawMode = false;
+    private static double size = 20.0;
+    private static boolean drawMode = true;
     private DefaultTableModel trainTableModel = new DefaultTableModel();
     private DefaultTableModel testTableModel = new DefaultTableModel();
     

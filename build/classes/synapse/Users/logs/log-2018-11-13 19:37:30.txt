@@ -1,0 +1,9 @@
+Dataset trained on /home/quicksilver/Backpropagation/data/579.txt
+Training Accuracy 99.74025974025975%
+Training Accuracy 100.0%
+Number of Epochs 1000
+************** Model Summary **************
+Number of hidden layers4,4
+Momentum 0.7
+Optimizer :- SGD with momentum
+Learning rate 0.1
