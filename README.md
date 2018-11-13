@@ -11,3 +11,7 @@ An interactive tool for tuning the hyperparameters of a neural network.
 cd dist
 ja -jar Synapse.jar
 ```
+## GUI
+
+![Training Module](synapse2.png)
+![Graph](synapse1.png)
