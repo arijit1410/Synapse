@@ -9,7 +9,7 @@ An interactive tool for tuning the hyperparameters of a neural network.
 ## To run the project
 ```
 cd dist
-ja -jar Synapse.jar
+java -jar Synapse.jar
 ```
 ## GUI
 
